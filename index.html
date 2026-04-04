@@ -657,6 +657,129 @@ body::before{
 .prod-log-del:active{color:var(--red)}
 .part-card-total{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--green);background:var(--green-gl);border-radius:100px;padding:2px 9px}
 
+/* ── THREAD CALCULATOR ── */
+.th-tabs{
+  display:flex;background:var(--bg);border-radius:var(--r);
+  padding:4px;margin-bottom:12px;box-shadow:var(--nm-in);
+}
+.th-tab{
+  flex:1;background:none;border:none;color:var(--dim);
+  padding:9px 6px;border-radius:14px;
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.04em;cursor:pointer;transition:all .22s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.th-tab.active{
+  background:var(--glass);color:var(--text);
+  box-shadow:5px 5px 12px var(--nm-dark),-3px -3px 8px var(--nm-light),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.th-badge{
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  background:rgba(154,171,196,0.25);color:var(--dim);
+  border-radius:100px;padding:1px 6px;
+}
+.th-tab.active .th-badge{background:var(--accent-gl);color:var(--accent)}
+
+.th-search-wrap{position:relative;margin-bottom:12px}
+.th-search-input{
+  width:100%;background:var(--bg);
+  border:1px solid rgba(255,255,255,0.7);
+  border-radius:12px;padding:11px 13px 11px 36px;
+  color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;
+  outline:none;-webkit-appearance:none;appearance:none;
+  box-shadow:var(--nm-in);transition:box-shadow .2s;
+}
+.th-search-input:focus{box-shadow:var(--nm-in),0 0 0 2px rgba(100,130,200,0.2)}
+.th-search-input::placeholder{color:var(--dim)}
+
+.th-panel{display:none}
+.th-panel.active{display:block}
+
+.th-info{
+  display:flex;align-items:flex-start;gap:8px;
+  margin-bottom:10px;padding:10px 12px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);border-radius:var(--r2);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.th-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.th-dot.blue{background:#3A7EC8}
+.th-dot.gold{background:#B8820A}
+.th-info-lbl{font-size:12px;color:var(--text2);flex:1;line-height:1.4}
+.th-info-lbl b{color:var(--text)}
+.th-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);white-space:nowrap}
+
+.th-table-wrap{
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.th-table{width:100%;border-collapse:collapse}
+.th-table thead th{
+  background:rgba(255,255,255,0.55);
+  padding:10px 14px;text-align:left;
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+  border-bottom:1px solid rgba(190,202,225,0.5);
+  position:sticky;top:0;
+}
+.th-right{text-align:right!important;color:var(--accent)!important}
+.th-table tbody tr{border-bottom:1px solid rgba(190,202,225,0.25);transition:background .12s}
+.th-table tbody tr:last-child{border-bottom:none}
+.th-table tbody tr:active{background:rgba(255,255,255,0.5)}
+.th-table tbody tr.th-hidden{display:none}
+.th-table tbody tr.th-hl td.col-tap{color:var(--accent);font-weight:700}
+.th-table td{padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:14px}
+.th-table td.col-tap{color:var(--text);font-weight:600}
+.th-table td.col-pitch{color:var(--dim);font-size:12px}
+.th-table td.col-drill{text-align:right;font-size:19px;font-weight:700;color:var(--green)}
+.th-table td.col-drill .thu{font-size:11px;font-weight:400;color:var(--dim);margin-left:1px}
+.th-empty{text-align:center;padding:28px;color:var(--dim);font-size:14px}
+
+/* compare */
+.th-cmp-empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:13px}
+.th-cmp-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.th-cmp-card{
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);border-radius:var(--r2);padding:13px;
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.th-cmp-card.cc{border-top:3px solid #3A7EC8}
+.th-cmp-card.cf{border-top:3px solid #B8820A}
+.th-card-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.th-card-lbl.blue{color:#3A7EC8}
+.th-card-lbl.gold{color:#B8820A}
+.th-card-sz{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);margin-bottom:5px}
+.th-card-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;line-height:1}
+.th-card-val.blue{color:#3A7EC8}
+.th-card-val.gold{color:#B8820A}
+.th-card-val .thu{font-size:11px;font-weight:400;color:var(--dim)}
+.th-card-note{font-size:10px;color:var(--dim);margin-top:5px;line-height:1.4}
+.th-cmp-diff{
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);border-radius:var(--r2);padding:13px;
+  margin-bottom:12px;
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.th-diff-title{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.th-diff-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(190,202,225,0.3)}
+.th-diff-row:last-child{border-bottom:none}
+.th-diff-lbl{font-size:12px;color:var(--dim)}
+.th-diff-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700}
+.th-diff-val.up{color:#B8820A}
+.th-diff-val.dn{color:var(--green)}
+.th-no-form{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--r2);padding:14px;text-align:center;
+  font-size:13px;color:var(--dim);margin-bottom:12px;
+  box-shadow:var(--glass-shadow);
+}
+.th-no-form span{color:#B8820A;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -720,11 +843,60 @@ body::before{
     </div>
     <!-- THREAD / HOLE -->
     <div class="view" id="view-thread">
-      <div class="parts-head">
-        <div class="st">Різьба / Отвір</div>
+      <!-- internal tabs -->
+      <div class="th-tabs">
+        <button class="th-tab active" id="tht-classic" onclick="thSwitch('classic')">Класичний<span class="th-badge" id="badge-classic">62</span></button>
+        <button class="th-tab" id="tht-form" onclick="thSwitch('form')">Розкатник<span class="th-badge" id="badge-form">9</span></button>
+        <button class="th-tab" id="tht-compare" onclick="thSwitch('compare')">⇄ Порівн.</button>
       </div>
-      <div class="empty" style="margin-top:60px">
-        🔩 Розділ у розробці.<br>Незабаром тут з'явиться довідник різьб та отворів.
+
+      <!-- search -->
+      <div class="th-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="th-search" class="th-search-input" placeholder="Пошук: M8, M10x1.5…" autocomplete="off" spellcheck="false" oninput="thSearch(this.value)">
+      </div>
+
+      <!-- classic panel -->
+      <div class="th-panel active" id="thp-classic">
+        <div class="th-info">
+          <span class="th-dot blue"></span>
+          <span class="th-info-lbl"><b>Класичний мітчик</b> / різьбофреза — метрична різьба M</span>
+          <span class="th-count"><span id="count-classic">62</span> рядків</span>
+        </div>
+        <div class="th-table-wrap">
+          <table class="th-table">
+            <thead><tr><th>Різьба</th><th>Крок</th><th class="th-right">∅ Свердла</th></tr></thead>
+            <tbody id="tbody-classic"></tbody>
+          </table>
+          <div class="th-empty" id="empty-classic" style="display:none">🔍 Нічого не знайдено</div>
+        </div>
+      </div>
+
+      <!-- form panel -->
+      <div class="th-panel" id="thp-form">
+        <div class="th-info">
+          <span class="th-dot gold"></span>
+          <span class="th-info-lbl"><b>Розкатник (безстружковий)</b> — збільшений отвір під пластичне деформування</span>
+          <span class="th-count"><span id="count-form">9</span> рядків</span>
+        </div>
+        <div class="th-table-wrap">
+          <table class="th-table">
+            <thead><tr><th>Різьба</th><th>Крок</th><th class="th-right">∅ Свердла</th></tr></thead>
+            <tbody id="tbody-form"></tbody>
+          </table>
+          <div class="th-empty" id="empty-form" style="display:none">🔍 Нічого не знайдено</div>
+        </div>
+      </div>
+
+      <!-- compare panel -->
+      <div class="th-panel" id="thp-compare">
+        <div class="th-search-wrap" style="padding-top:0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="th-compare-input" class="th-search-input" placeholder="Введіть розмір: M8, M10x1.5…" autocomplete="off" spellcheck="false" oninput="runCompare(this.value)" style="text-transform:uppercase">
+        </div>
+        <div id="th-compare-result">
+          <div class="th-cmp-empty"><div style="font-size:32px;margin-bottom:8px">⇄</div>Введіть розмір різьби для порівняння</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1452,6 +1624,115 @@ function exportPartPDF() {
   doc.save(`part_${p.name.replace(/\s+/g,'_')}.pdf`);
   showToast('📄 PDF збережено');
 }
+
+
+// ─── THREAD CALCULATOR ──────────────────────────────────
+const TH_CLASSIC=[
+  {tap:'M1',pitch:0.25,drill:0.75},{tap:'M1.2',pitch:0.25,drill:0.95},{tap:'M1.4',pitch:0.30,drill:1.10},
+  {tap:'M1.6',pitch:0.35,drill:1.25},{tap:'M1.8',pitch:0.35,drill:1.45},{tap:'M2',pitch:0.40,drill:1.60},
+  {tap:'M2.2',pitch:0.45,drill:1.75},{tap:'M2.5',pitch:0.45,drill:2.05},{tap:'M3',pitch:0.50,drill:2.50},
+  {tap:'M3.5',pitch:0.60,drill:2.90},{tap:'M4',pitch:0.70,drill:3.30},{tap:'M4.5',pitch:0.75,drill:3.75},
+  {tap:'M5',pitch:0.80,drill:4.20},{tap:'M6',pitch:1.00,drill:5.00},{tap:'M7',pitch:1.00,drill:6.00},
+  {tap:'M8',pitch:1.25,drill:6.80},{tap:'M8',pitch:1.00,drill:7.00},{tap:'M9',pitch:1.25,drill:7.80},
+  {tap:'M9',pitch:1.00,drill:8.00},{tap:'M10',pitch:1.50,drill:8.50},{tap:'M10',pitch:1.25,drill:8.80},
+  {tap:'M10',pitch:1.00,drill:9.00},{tap:'M11',pitch:1.50,drill:9.50},{tap:'M12',pitch:1.75,drill:10.20},
+  {tap:'M12',pitch:1.50,drill:10.50},{tap:'M12',pitch:1.25,drill:10.80},{tap:'M12',pitch:1.00,drill:11.00},
+  {tap:'M14',pitch:2.00,drill:12.00},{tap:'M14',pitch:1.50,drill:12.50},{tap:'M14',pitch:1.25,drill:12.80},
+  {tap:'M14',pitch:1.00,drill:13.00},{tap:'M16',pitch:2.00,drill:14.00},{tap:'M16',pitch:1.50,drill:14.50},
+  {tap:'M16',pitch:1.00,drill:15.00},{tap:'M18',pitch:2.50,drill:15.50},{tap:'M18',pitch:2.00,drill:16.00},
+  {tap:'M18',pitch:1.50,drill:16.50},{tap:'M18',pitch:1.00,drill:17.00},{tap:'M20',pitch:2.50,drill:17.50},
+  {tap:'M20',pitch:2.00,drill:18.00},{tap:'M20',pitch:1.50,drill:18.50},{tap:'M22',pitch:2.50,drill:19.50},
+  {tap:'M22',pitch:2.00,drill:20.00},{tap:'M22',pitch:1.50,drill:20.50},{tap:'M24',pitch:3.00,drill:21.00},
+  {tap:'M24',pitch:2.00,drill:22.00},{tap:'M24',pitch:1.50,drill:22.50},{tap:'M27',pitch:3.00,drill:24.00},
+  {tap:'M27',pitch:2.00,drill:25.00},{tap:'M27',pitch:1.50,drill:25.50},{tap:'M30',pitch:3.50,drill:26.50},
+  {tap:'M30',pitch:3.00,drill:27.00},{tap:'M30',pitch:2.00,drill:28.00},{tap:'M30',pitch:1.50,drill:28.50},
+  {tap:'M33',pitch:3.50,drill:29.50},{tap:'M33',pitch:3.00,drill:30.00},{tap:'M33',pitch:2.00,drill:31.00},
+  {tap:'M33',pitch:1.50,drill:31.50},{tap:'M36',pitch:4.00,drill:32.00},{tap:'M42',pitch:4.50,drill:37.50},
+];
+const TH_FORM=[
+  {tap:'M2',pitch:0.40,drill:1.80},{tap:'M2.5',pitch:0.45,drill:2.28},{tap:'M3',pitch:0.50,drill:2.75},
+  {tap:'M4',pitch:0.70,drill:3.65},{tap:'M5',pitch:0.80,drill:4.60},{tap:'M6',pitch:1.00,drill:5.50},
+  {tap:'M8',pitch:1.25,drill:7.38},{tap:'M10',pitch:1.50,drill:9.25},{tap:'M12',pitch:1.75,drill:11.13},
+];
+
+let thCurTab = 'classic';
+
+function thRenderTable(data, tbodyId) {
+  document.getElementById(tbodyId).innerHTML = data.map(r=>`
+    <tr data-tap="${r.tap}" data-pitch="${r.pitch}">
+      <td class="col-tap">${r.tap}</td>
+      <td class="col-pitch">${r.pitch.toFixed(2)}</td>
+      <td class="col-drill">${r.drill.toFixed(2)}<span class="thu">мм</span></td>
+    </tr>`).join('');
+}
+
+function thSwitch(tab) {
+  thCurTab = tab;
+  document.querySelectorAll('.th-tab').forEach(b=>b.classList.toggle('active', b.id==='tht-'+tab));
+  document.querySelectorAll('.th-panel').forEach(p=>p.classList.toggle('active', p.id==='thp-'+tab));
+  if(tab==='compare'){
+    const q=document.getElementById('th-search').value.trim();
+    if(q){ document.getElementById('th-compare-input').value=q; runCompare(q); }
+  }
+}
+
+function thSearch(q) {
+  ['classic','form'].forEach(type=>{
+    const data = type==='classic'?TH_CLASSIC:TH_FORM;
+    const tbody = document.getElementById('tbody-'+type);
+    const qu = q.trim().toUpperCase().replace(/\s+/g,'');
+    let shown=0;
+    tbody.querySelectorAll('tr').forEach(row=>{
+      const tap=row.dataset.tap.toUpperCase(), pitch=row.dataset.pitch;
+      const full=tap+'X'+pitch;
+      const match=!qu||tap.includes(qu)||full.replace('.','').includes(qu.replace('.',''))||full.includes(qu);
+      row.classList.toggle('th-hidden',!match);
+      if(match){ shown++; row.classList.toggle('th-hl', qu.length>0 && tap===qu.replace('X','')); }
+    });
+    document.getElementById('count-'+type).textContent=shown;
+    document.getElementById('badge-'+type).textContent=shown;
+    document.getElementById('empty-'+type).style.display=shown===0?'block':'none';
+  });
+}
+
+function runCompare(raw) {
+  const q=raw.trim().toUpperCase().replace(/\s+/g,'');
+  const el=document.getElementById('th-compare-result');
+  if(!q){ el.innerHTML='<div class="th-cmp-empty"><div style="font-size:32px;margin-bottom:8px">⇄</div>Введіть розмір різьби для порівняння</div>'; return; }
+  const mMatch=q.match(/^(M\d+(?:\.\d+)?)(?:X([\d.]+))?/);
+  if(!mMatch){ el.innerHTML='<div class="th-cmp-empty"><div style="font-size:24px;margin-bottom:8px">⚠️</div>Формат: M8 або M10x1.5</div>'; return; }
+  const mSize=mMatch[1], pitchFilter=mMatch[2]?parseFloat(mMatch[2]):null;
+  const classics=TH_CLASSIC.filter(r=>r.tap.toUpperCase()===mSize&&(pitchFilter===null||Math.abs(r.pitch-pitchFilter)<0.01));
+  const formEntry=TH_FORM.find(r=>r.tap.toUpperCase()===mSize);
+  if(!classics.length&&!formEntry){ el.innerHTML=`<div class="th-cmp-empty"><div style="font-size:24px;margin-bottom:8px">🔍</div>Розмір <b>${mSize}</b> не знайдено</div>`; return; }
+  let html='';
+  classics.forEach(cl=>{
+    const fs=TH_FORM.find(r=>r.tap.toUpperCase()===mSize);
+    html+=`<div class="th-cmp-cards">
+      <div class="th-cmp-card cc"><div class="th-card-lbl blue">⚙ Класичний</div><div class="th-card-sz">${cl.tap}×${cl.pitch.toFixed(2)}</div><div class="th-card-val blue">${cl.drill.toFixed(2)}<span class="thu"> мм</span></div><div class="th-card-note">Мітчик / різьбофреза</div></div>`;
+    if(fs){
+      const diff=(fs.drill-cl.drill);
+      html+=`<div class="th-cmp-card cf"><div class="th-card-lbl gold">⬡ Розкатник</div><div class="th-card-sz">${fs.tap}×${fs.pitch.toFixed(2)}</div><div class="th-card-val gold">${fs.drill.toFixed(2)}<span class="thu"> мм</span></div><div class="th-card-note">Безстружковий мітчик</div></div></div>
+      <div class="th-cmp-diff">
+        <div class="th-diff-title">📊 Різниця між методами</div>
+        <div class="th-diff-row"><span class="th-diff-lbl">Ø класичний</span><span class="th-diff-val">${cl.drill.toFixed(2)} мм</span></div>
+        <div class="th-diff-row"><span class="th-diff-lbl">Ø розкатник</span><span class="th-diff-val">${fs.drill.toFixed(2)} мм</span></div>
+        <div class="th-diff-row"><span class="th-diff-lbl">Різниця Δ</span><span class="th-diff-val ${diff>0?'up':'dn'}">${diff>0?'+':''}${diff.toFixed(2)} мм</span></div>
+        <div class="th-diff-row"><span class="th-diff-lbl">Отвір для розкатника</span><span class="th-diff-val ${diff>0?'up':'dn'}">${diff>0?'▲ більший':'▼ менший'}</span></div>
+      </div>`;
+    } else {
+      html+=`</div><div class="th-no-form">⚡ Розмір <span>${mSize}</span> відсутній у таблиці розкатників.<br>Доступні: M2–M12</div>`;
+    }
+  });
+  if(!classics.length&&formEntry){
+    html+=`<div class="th-cmp-cards"><div class="th-cmp-card cf" style="grid-column:1/-1"><div class="th-card-lbl gold">⬡ Розкатник</div><div class="th-card-sz">${formEntry.tap}×${formEntry.pitch.toFixed(2)}</div><div class="th-card-val gold">${formEntry.drill.toFixed(2)}<span class="thu"> мм</span></div></div></div>`;
+  }
+  el.innerHTML=html;
+}
+
+// init thread tables
+thRenderTable(TH_CLASSIC,'tbody-classic');
+thRenderTable(TH_FORM,'tbody-form');
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
