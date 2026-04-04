@@ -1,0 +1,10 @@
+# System
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Deployment artifacts
+*.zip
