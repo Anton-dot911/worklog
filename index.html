@@ -780,6 +780,76 @@ body::before{
 }
 .th-no-form span{color:#B8820A;font-weight:700}
 
+/* ── CUTTING CALCULATOR ── */
+.cut-mat-badge{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#1A5A30;background:var(--green-gl);
+  border-radius:100px;padding:5px 14px;
+  display:inline-block;margin-bottom:12px;
+}
+.cut-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.cut-mat-btn{
+  background:var(--bg);border:none;color:var(--dim);
+  border-radius:var(--r2);padding:11px 8px;
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
+  cursor:pointer;box-shadow:var(--nm-btn);
+  transition:box-shadow .15s,color .15s;
+}
+.cut-mat-btn.active{
+  color:var(--accent);
+  box-shadow:var(--nm-in);
+}
+.cut-inp-wrap{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.cut-inp{
+  width:72px;background:var(--bg);
+  border:1px solid rgba(255,255,255,0.7);border-radius:10px;
+  padding:9px 10px;color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;
+  text-align:center;outline:none;-webkit-appearance:none;appearance:none;
+  box-shadow:var(--nm-in);
+}
+.cut-inp-sm{width:52px}
+.cut-inp:focus{box-shadow:var(--nm-in),0 0 0 2px rgba(100,130,200,0.2)}
+.cut-unit{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);min-width:20px}
+.cut-stepper{
+  width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);
+  color:var(--text2);font-size:18px;font-weight:300;cursor:pointer;
+  box-shadow:var(--nm-btn);display:flex;align-items:center;justify-content:center;
+  transition:box-shadow .12s;
+}
+.cut-stepper:active{box-shadow:var(--nm-in)}
+
+/* Results grid */
+.cut-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.cut-res-card{
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);border-radius:var(--r2);
+  padding:14px 12px;text-align:center;
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.85);
+}
+.cut-res-card.full{grid-column:1/-1}
+.cut-res-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.cut-res-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);line-height:1}
+.cut-res-val.green{color:var(--green)}
+.cut-res-val.blue{color:#3A7EC8}
+.cut-res-unit{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:3px}
+.cut-res-sub{font-size:10px;color:var(--dim);margin-top:4px}
+
+/* Hint box */
+.cut-hint{
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);border-radius:var(--r2);
+  padding:13px 14px;
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.cut-hint-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.cut-hint-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(190,202,225,0.25)}
+.cut-hint-row:last-child{border-bottom:none}
+.cut-hint-lbl{font-size:12px;color:var(--dim)}
+.cut-hint-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text2)}
+
 </style>
 </head>
 <body>
@@ -899,7 +969,49 @@ body::before{
         </div>
       </div>
     </div>
+
+    <!-- CUTTING PARAMETERS — Алюміній -->
+    <div class="view" id="view-cut">
+      <div class="th-tabs" style="margin-bottom:14px">
+        <button class="th-tab active" id="cut-tab-mill"  onclick="cutSwitch('mill')">Фрезер.</button>
+        <button class="th-tab"        id="cut-tab-drill" onclick="cutSwitch('drill')">Свердл.</button>
+        <button class="th-tab"        id="cut-tab-bore"  onclick="cutSwitch('bore')">Розточ.</button>
+        <button class="th-tab"        id="cut-tab-tap"   onclick="cutSwitch('tap')">Різьбоф.</button>
+      </div>
+      <div class="cut-mat-badge">⚙ Алюміній · Al 6061 / Al 7075</div>
+      <div class="cut-row2">
+        <button class="cut-mat-btn active" id="cutm-carbide" onclick="cutSetMat('carbide')">Carbide</button>
+        <button class="cut-mat-btn"        id="cutm-hss"     onclick="cutSetMat('hss')">HSS / HSS-Co</button>
+      </div>
+      <div class="cs-section" style="margin-bottom:12px">
+        <div class="cs-row" id="cut-row-d">
+          <span class="cs-lbl">∅ Інструменту</span>
+          <div class="cut-inp-wrap"><input type="number" class="cut-inp" id="cut-d" min="1" max="100" step="0.5" value="10" oninput="cutCalc()"><span class="cut-unit">мм</span></div>
+        </div>
+        <div class="cs-row" id="cut-row-z">
+          <span class="cs-lbl">К-сть зубів z</span>
+          <div class="cut-inp-wrap">
+            <button class="cut-stepper" onclick="cutStep('cut-z',-1)">−</button>
+            <input type="number" class="cut-inp cut-inp-sm" id="cut-z" min="1" max="8" step="1" value="3" oninput="cutCalc()">
+            <button class="cut-stepper" onclick="cutStep('cut-z',1)">+</button>
+          </div>
+        </div>
+        <div class="cs-row" id="cut-row-ap">
+          <span class="cs-lbl">Глибина ap</span>
+          <div class="cut-inp-wrap"><input type="number" class="cut-inp" id="cut-ap" min="0.1" max="50" step="0.1" value="3" oninput="cutCalc()"><span class="cut-unit">мм</span></div>
+        </div>
+        <div class="cs-row" id="cut-row-ae">
+          <span class="cs-lbl">Ширина ae</span>
+          <div class="cut-inp-wrap"><input type="number" class="cut-inp" id="cut-ae" min="0.1" max="100" step="0.5" value="8" oninput="cutCalc()"><span class="cut-unit">мм</span></div>
+        </div>
+      </div>
+      <div class="cut-results" id="cut-results"></div>
+      <div class="cut-hint" id="cut-hint"></div>
+    </div>
+
   </div>
+
+  <div class="bnav">
     <button class="nb active" id="nb-timer" onclick="switchTab('timer')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>ЧАС
     </button>
@@ -914,6 +1026,9 @@ body::before{
     </button>
     <button class="nb" id="nb-thread" onclick="switchTab('thread')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>РІЗЬБА
+    </button>
+    <button class="nb" id="nb-cut" onclick="switchTab('cut')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 2.5l7 7-14 14-7-7 14-14z"/><path d="M2 22l4-4"/><path d="M7.5 7.5l9 9"/></svg>РЕЖИМИ
     </button>
   </div>
 </div>
@@ -1092,7 +1207,8 @@ function render(tab) {
   if(tab==='schedule') renderSched();
   if(tab==='reports') renderRep();
   if(tab==='parts') renderParts();
-  if(tab==='thread') {}  // placeholder
+  if(tab==='thread') {}
+  if(tab==='cut') cutCalc();
 }
 
 // ─── CLOCK ───────────────────────────────────────────────
@@ -1733,6 +1849,171 @@ function runCompare(raw) {
 // init thread tables
 thRenderTable(TH_CLASSIC,'tbody-classic');
 thRenderTable(TH_FORM,'tbody-form');
+
+
+// ─── CUTTING CALCULATOR ─────────────────────────────────
+// Al 6061 / Al 7075 parameters
+// [Vc_min, Vc_max, fz_base_coeff, fz_min, fz_max]
+const CUT_PARAMS = {
+  mill: {
+    carbide: { Vc:[400,600], fzK:[0.005,0.012] },
+    hss:     { Vc:[80,130],  fzK:[0.003,0.007] },
+  },
+  drill: {
+    carbide: { Vc:[80,150],  fzK:[0.010,0.025] },  // fz = fn (feed/rev)
+    hss:     { Vc:[30,60],   fzK:[0.006,0.015] },
+  },
+  bore: {
+    carbide: { Vc:[300,500], fzK:[0.050,0.150] },
+    hss:     { Vc:[60,100],  fzK:[0.030,0.080] },
+  },
+  tap: {
+    carbide: { Vc:[150,300], fzK:[0,0] },  // pitch-driven
+    hss:     { Vc:[10,25],   fzK:[0,0] },
+  },
+};
+
+// default ap/ae recommendations per operation
+const CUT_DEF = {
+  mill:  { ap_ratio:0.3, ae_ratio:0.7 },
+  drill: { ap_ratio:1.0, ae_ratio:1.0 },
+  bore:  { ap_ratio:0.05, ae_ratio:0.2 },
+  tap:   { ap_ratio:1.0, ae_ratio:1.0 },
+};
+
+let cutOp  = 'mill';
+let cutMat = 'carbide';
+
+function cutSwitch(op) {
+  cutOp = op;
+  document.querySelectorAll('[id^="cut-tab-"]').forEach(b=>b.classList.toggle('active', b.id==='cut-tab-'+op));
+  // show/hide fields
+  document.getElementById('cut-row-z').style.display   = op==='mill'||op==='tap'||op==='bore' ? '' : 'none';
+  document.getElementById('cut-row-ap').style.display  = op==='drill' ? 'none' : '';
+  document.getElementById('cut-row-ae').style.display  = op==='drill'||op==='bore'||op==='tap' ? 'none' : '';
+  // set sensible defaults
+  const defs = { mill:{d:10,z:3,ap:3,ae:8}, drill:{d:8,z:2,ap:25,ae:8}, bore:{d:25,z:1,ap:0.2,ae:0.1}, tap:{d:10,z:2,ap:15,ae:10} };
+  const def = defs[op];
+  document.getElementById('cut-d').value  = def.d;
+  document.getElementById('cut-z').value  = def.z;
+  document.getElementById('cut-ap').value = def.ap;
+  document.getElementById('cut-ae').value = def.ae;
+  // update label
+  const labels = { mill:'Глибина ap', drill:'Довжина свердл.', bore:'Глибина ap', tap:'Глибина різьби' };
+  const apLbl = document.querySelector('#cut-row-ap .cs-lbl');
+  if(apLbl) apLbl.textContent = labels[op]||'Глибина ap';
+  cutCalc();
+}
+
+function cutSetMat(mat) {
+  cutMat = mat;
+  document.getElementById('cutm-carbide').classList.toggle('active', mat==='carbide');
+  document.getElementById('cutm-hss').classList.toggle('active', mat==='hss');
+  cutCalc();
+}
+
+function cutStep(id, delta) {
+  const el = document.getElementById(id);
+  el.value = Math.max(+el.min||1, Math.min(+el.max||99, (+el.value||0)+delta));
+  cutCalc();
+}
+
+function cutCalc() {
+  const d  = parseFloat(document.getElementById('cut-d').value)  || 10;
+  const z  = parseInt(document.getElementById('cut-z').value)     || 2;
+  const ap = parseFloat(document.getElementById('cut-ap').value)  || 1;
+  const ae = parseFloat(document.getElementById('cut-ae').value)  || d;
+
+  const p  = CUT_PARAMS[cutOp][cutMat];
+  const Vc_mid = (p.Vc[0] + p.Vc[1]) / 2;
+  const Vc_min = p.Vc[0], Vc_max = p.Vc[1];
+
+  // RPM
+  const rpm_mid = Math.round((Vc_mid * 1000) / (Math.PI * d));
+  const rpm_min = Math.round((Vc_min * 1000) / (Math.PI * d));
+  const rpm_max = Math.round((Vc_max * 1000) / (Math.PI * d));
+
+  // fz (feed per tooth / feed per rev for drilling)
+  // Scale fz with sqrt(D) — larger tools get larger fz
+  const fz_mid = parseFloat((p.fzK[0] + p.fzK[1]) / 2 * Math.sqrt(d)).toFixed(3);
+  const fz_min = parseFloat(p.fzK[0] * Math.sqrt(d)).toFixed(3);
+  const fz_max = parseFloat(p.fzK[1] * Math.sqrt(d)).toFixed(3);
+
+  // Vf (mm/min)
+  const divisor = cutOp === 'drill' ? 1 : z; // drill: fz = fn (feed/rev, 1 tooth equiv)
+  const vf_mid = Math.round(rpm_mid * parseFloat(fz_mid) * (cutOp==='drill'?1:z));
+  const vf_min = Math.round(rpm_min * parseFloat(fz_min) * (cutOp==='drill'?1:z));
+  const vf_max = Math.round(rpm_max * parseFloat(fz_max) * (cutOp==='drill'?1:z));
+
+  // MRR cm³/min (only for mill/bore)
+  let mrr = null;
+  if(cutOp==='mill')  mrr = (ae * ap * vf_mid / 1000).toFixed(1);
+  if(cutOp==='bore')  mrr = (Math.PI * d * ap * vf_mid / 1000).toFixed(2);
+
+  // Render results
+  const rEl = document.getElementById('cut-results');
+  const fzLabel = cutOp==='drill' ? 'Подача fn' : 'Подача fz';
+  const fzUnit  = cutOp==='drill' ? 'мм/об' : 'мм/зуб';
+
+  rEl.innerHTML = `
+    <div class="cut-res-card">
+      <div class="cut-res-lbl">Оберти n</div>
+      <div class="cut-res-val">${rpm_mid.toLocaleString()}</div>
+      <div class="cut-res-unit">об/хв</div>
+      <div class="cut-res-sub">${rpm_min.toLocaleString()} – ${rpm_max.toLocaleString()}</div>
+    </div>
+    <div class="cut-res-card">
+      <div class="cut-res-lbl">Подача Vf</div>
+      <div class="cut-res-val green">${vf_mid.toLocaleString()}</div>
+      <div class="cut-res-unit">мм/хв</div>
+      <div class="cut-res-sub">${vf_min.toLocaleString()} – ${vf_max.toLocaleString()}</div>
+    </div>
+    <div class="cut-res-card">
+      <div class="cut-res-lbl">Швидкість Vc</div>
+      <div class="cut-res-val blue">${Vc_mid}</div>
+      <div class="cut-res-unit">м/хв</div>
+      <div class="cut-res-sub">${Vc_min} – ${Vc_max}</div>
+    </div>
+    <div class="cut-res-card">
+      <div class="cut-res-lbl">${fzLabel}</div>
+      <div class="cut-res-val" style="font-size:22px">${fz_mid}</div>
+      <div class="cut-res-unit">${fzUnit}</div>
+      <div class="cut-res-sub">${fz_min} – ${fz_max}</div>
+    </div>
+    ${mrr!==null?`<div class="cut-res-card full"><div class="cut-res-lbl">Продуктивність MRR</div><div class="cut-res-val" style="font-size:22px">${mrr}</div><div class="cut-res-unit">см³/хв</div></div>`:''}
+  `;
+
+  // Hints
+  const rec = CUT_DEF[cutOp];
+  const hEl = document.getElementById('cut-hint');
+  const hints = [];
+  if(cutOp==='mill'){
+    hints.push(['Рекомендована ap', `≤ ${(d*rec.ap_ratio).toFixed(1)} мм (${Math.round(rec.ap_ratio*100)}% D)`]);
+    hints.push(['Рекомендована ae', `≤ ${(d*rec.ae_ratio).toFixed(1)} мм (${Math.round(rec.ae_ratio*100)}% D)`]);
+    hints.push(['Матеріал', 'Алюміній — охолодження або MQL']);
+    hints.push(['Кількість зубів', `${z} зуб(и) — ≥2 для Al, краще 3`]);
+  } else if(cutOp==='drill'){
+    hints.push(['Виведення стружки', 'Q-подача кожні 2×D']);
+    hints.push(['Охолодження', 'Емульсія або стисле повітря']);
+    hints.push(['Центрування', 'Центрувальний отвір перед свердлінням']);
+  } else if(cutOp==='bore'){
+    hints.push(['Допуск', 'IT7 досяжний при тонкому розточуванні']);
+    hints.push(['Рекомендована ap', `0.1 – 0.3 мм (чистова)`]);
+    hints.push(['Вібрація', 'Перевірити виліт борштанги < 4×D']);
+  } else if(cutOp==='tap'){
+    hints.push(['Охолодження', 'Мастило або емульсія обов\'язково']);
+    hints.push(['Подача', 'Дорівнює кроку різьби × n (синхронізована)']);
+    hints.push(['Попередній отвір', 'Перевір розділ РІЗЬБА']);
+  }
+
+  hEl.innerHTML = hints.length ? `
+    <div class="cut-hint-title">💡 Рекомендації для Al</div>
+    ${hints.map(h=>`<div class="cut-hint-row"><span class="cut-hint-lbl">${h[0]}</span><span class="cut-hint-val">${h[1]}</span></div>`).join('')}
+  ` : '';
+}
+
+// init
+cutCalc();
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
