@@ -99,19 +99,41 @@ body::before{
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-top:1px solid var(--glass-border);
   box-shadow:0 -4px 20px rgba(160,148,136,0.16);
-  display:flex;flex-shrink:0;
+  display:flex;flex-shrink:0;flex-direction:column;
   padding-bottom:var(--sb);
 }
-.nb{
-  flex:1;background:none;border:none;color:var(--dim);
-  padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:3px;
-  cursor:pointer;font-family:'Rajdhani',sans-serif;
-  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  transition:color .25s;
+.bnav-scroll{
+  display:flex;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
+  padding:8px 12px;
+  gap:8px;
 }
-.nb.active{color:var(--accent)}
-.nb.active svg{filter:drop-shadow(0 0 4px rgba(184,98,10,0.5))}
-.nb svg{width:22px;height:22px;stroke-width:1.7;transition:filter .25s}
+.bnav-scroll::-webkit-scrollbar{display:none}
+.nb{
+  flex-shrink:0;
+  background:var(--bg);
+  border:none;
+  color:var(--dim);
+  padding:8px 16px;
+  border-radius:100px;
+  display:flex;flex-direction:row;align-items:center;gap:6px;
+  cursor:pointer;
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:var(--nm-btn);
+  transition:all .22s;
+  scroll-snap-align:start;
+  white-space:nowrap;
+}
+.nb.active{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:3px 3px 8px var(--nm-dark),-2px -2px 6px var(--nm-light);
+}
+.nb.active svg{filter:none}
+.nb svg{width:16px;height:16px;stroke-width:1.8;transition:filter .25s;flex-shrink:0}
 
 /* ── TIMER VIEW ── */
 .timer-top{text-align:center;padding:24px 0 18px}
@@ -820,7 +842,7 @@ body::before{
 .cut-stepper:active{box-shadow:var(--nm-in)}
 
 /* Results grid */
-.cut-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.cut-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;min-height:10px}
 .cut-res-card{
   background:var(--glass);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -972,24 +994,27 @@ body::before{
 
     <!-- CUTTING PARAMETERS — Алюміній -->
     <div class="view" id="view-cut">
-      <div class="th-tabs" style="margin-bottom:14px">
+      <div class="th-tabs" style="margin-bottom:12px">
         <button class="th-tab active" id="cut-tab-mill"  onclick="cutSwitch('mill')">Фрезер.</button>
         <button class="th-tab"        id="cut-tab-drill" onclick="cutSwitch('drill')">Свердл.</button>
         <button class="th-tab"        id="cut-tab-bore"  onclick="cutSwitch('bore')">Розточ.</button>
         <button class="th-tab"        id="cut-tab-tap"   onclick="cutSwitch('tap')">Різьбоф.</button>
       </div>
-      <div class="cut-mat-badge">⚙ Алюміній · Al 6061 / Al 7075</div>
-      <div class="cut-row2">
+
+      <!-- tool material -->
+      <div class="cut-row2" style="margin-bottom:12px">
         <button class="cut-mat-btn active" id="cutm-carbide" onclick="cutSetMat('carbide')">Carbide</button>
         <button class="cut-mat-btn"        id="cutm-hss"     onclick="cutSetMat('hss')">HSS / HSS-Co</button>
       </div>
+
+      <!-- inputs -->
       <div class="cs-section" style="margin-bottom:12px">
         <div class="cs-row" id="cut-row-d">
           <span class="cs-lbl">∅ Інструменту</span>
           <div class="cut-inp-wrap"><input type="number" class="cut-inp" id="cut-d" min="1" max="100" step="0.5" value="10" oninput="cutCalc()"><span class="cut-unit">мм</span></div>
         </div>
         <div class="cs-row" id="cut-row-z">
-          <span class="cs-lbl">К-сть зубів z</span>
+          <span class="cs-lbl">Кількість зубів</span>
           <div class="cut-inp-wrap">
             <button class="cut-stepper" onclick="cutStep('cut-z',-1)">−</button>
             <input type="number" class="cut-inp cut-inp-sm" id="cut-z" min="1" max="8" step="1" value="3" oninput="cutCalc()">
@@ -1005,13 +1030,17 @@ body::before{
           <div class="cut-inp-wrap"><input type="number" class="cut-inp" id="cut-ae" min="0.1" max="100" step="0.5" value="8" oninput="cutCalc()"><span class="cut-unit">мм</span></div>
         </div>
       </div>
+
+      <!-- RESULTS — shown first visually via flex-column reorder -->
       <div class="cut-results" id="cut-results"></div>
       <div class="cut-hint" id="cut-hint"></div>
+
     </div>
 
   </div>
 
   <div class="bnav">
+    <div class="bnav-scroll">
     <button class="nb active" id="nb-timer" onclick="switchTab('timer')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>ЧАС
     </button>
@@ -1030,6 +1059,7 @@ body::before{
     <button class="nb" id="nb-cut" onclick="switchTab('cut')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 2.5l7 7-14 14-7-7 14-14z"/><path d="M2 22l4-4"/><path d="M7.5 7.5l9 9"/></svg>РЕЖИМИ
     </button>
+    </div>
   </div>
 </div>
 
@@ -2013,7 +2043,7 @@ function cutCalc() {
 }
 
 // init
-cutCalc();
+setTimeout(cutCalc, 0);
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
