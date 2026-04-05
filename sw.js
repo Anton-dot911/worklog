@@ -1,4 +1,4 @@
-const CACHE = 'worklog-v13';
+const CACHE = 'worklog-v16';
 const ASSETS = [
   '/',
   '/index.html',
